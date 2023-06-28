@@ -11,7 +11,7 @@ class ListCreateContact(ListCreateAPIView):
     serializer_class = ContactsSerializer
     permission_classes = (permissions.IsAuthenticated,)
 
-    def perform_create(self,serializer):
+    def perform_create(self, serializer):
         serializer.save(owner=self.request.user)
 
     def get_queryset(self):

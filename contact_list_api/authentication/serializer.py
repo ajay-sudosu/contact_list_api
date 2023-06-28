@@ -2,6 +2,7 @@ from django.forms import ValidationError
 from rest_framework import serializers
 from django.contrib.auth.models import User
 
+
 class UserSerializer(serializers.ModelSerializer):
     username = serializers.CharField(max_length=100)
     password = serializers.CharField(max_length=100,write_only=True)
@@ -11,24 +12,20 @@ class UserSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ['username','first_name','last_name','email','password']
-
+        fields = ['username', 'first_name', 'last_name', 'email', 'password']
 
     def validate_username(self,username):
         if User.objects.filter(username=username).exists():
-            raise ValidationError({'message':'user is already present'})
+            raise ValidationError({'message': 'user is already present'})
         return username
-
 
     def validate(self,attrs):
         if User.objects.filter(email=attrs.get('email')).exists():
-            raise ValidationError({'message':'email in use'})
+            raise ValidationError({'message': 'email in use'})
         return attrs
-        
 
     def create(self,validate_data):
         return User.objects.create_user(**validate_data)
-
 
 
 class LoginSerializer(serializers.ModelSerializer):
@@ -37,4 +34,4 @@ class LoginSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ['username','password']
+        fields = ['username', 'password']
